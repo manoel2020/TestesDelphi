@@ -1,0 +1,87 @@
+unit Unit2;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Buttons, Vcl.StdCtrls, Vcl.Mask,
+  RxToolEdit, Vcl.ExtCtrls;
+
+type
+  TForm2 = class(TForm)
+    DateEdit1: TDateEdit;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    Panel1: TPanel;
+    procedure FormCreate(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form2: TForm2;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm2.FormCreate(Sender: TObject);
+var
+   Ret: Tpanel;
+   but: TspeedButton;
+   i: integer;
+begin
+   for I := 1 to 31 do
+   begin
+      ret := TPanel.Create(Self);
+      ret.Height := 50;
+      ret.Width := 50;
+      ret.Name := 'ret_'+IntToStr(i);
+      ret.Visible := False;
+      ret.Parent := Self;
+
+      but := TspeedButton.Create(ret);
+      but.Align := TAlign.alClient;
+      but.Caption := IntToStr(i);
+      but.Parent := ret;
+   end;
+end;
+
+procedure TForm2.SpeedButton2Click(Sender: TObject);
+var
+   smes,sano : String;
+   imes,iano,i : integer;
+   y:integer;
+begin
+   smes := FormatDateTime('mm',DateEdit1.Date);
+   sano := FormatDateTime('yyyy',DateEdit1.Date);
+   iano := StrToInt(sano);
+   imes := StrToInt(smes);
+
+   for I := 1 to 31 do
+   begin
+      if i<= MonthDays[IsLeapYear(iAno),iMes] then
+      begin
+         TPanel(FindComponent('ret_'+IntToStr(i))).Visible := true;
+         TPanel(FindComponent('ret_'+IntToStr(i))).Left := DayOfWeek(StrToDate(intToStr(i)+'/'+smes+'/'+sano))*
+                                                          TPanel(FindComponent('ret_'+IntToStr(i))).Width;
+         TPanel(FindComponent('ret_'+IntToStr(i))).top := y;
+
+         if(i=25)and(imes=12)then
+            TPanel(FindComponent('ret_'+IntToStr(i))).Color := clBlue;
+         else
+            TPanel(FindComponent('ret_'+IntToStr(i))).Color := clWindow;
+
+
+         if(DayOfWeek(StrToDate(intToStr(i)+'/'+smes+'/'+sano)) = 7)then
+         begin
+            y := y + TPanel(FindComponent('ret_'+IntToStr(i))).Height;
+         end;
+      end;
+   end;
+end;
+
+end.

@@ -1,0 +1,116 @@
+unit Login;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, InscrevaSe,
+  Vcl.Imaging.jpeg, Vcl.Imaging.pngimage, Vcl.ExtCtrls, Data.DB,
+  Datasnap.DBClient, TeditBorderFocusColor;
+
+type
+  TFLogin = class(TForm)
+    user: TEdit;
+    Label1: TLabel;
+    Senha: TEdit;
+    Label2: TLabel;
+    Button1: TButton;
+    Inscrevase: TButton;
+    ClientDataSetUser: TClientDataSet;
+    DataSource1: TDataSource;
+    ClientDataSetUsernome: TStringField;
+    ClientDataSetUserusuario: TStringField;
+    ClientDataSetUsersenha: TStringField;
+    ClientDataSetUserperfil: TStringField;
+    procedure Button1Click(Sender: TObject);
+    procedure userKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure InscrevaseClick(Sender: TObject);
+    procedure userClick(Sender: TObject);
+    procedure SenhaClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FLogin: TFLogin;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFLogin.Button1Click(Sender: TObject);
+var
+  I: Integer;
+begin
+   if (FileExists(ExtractFilePath(ParamStr(0))+('db_user.xml'))) then
+   begin
+      ClientDataSetUser.CreateDataSet;
+      ClientDataSetUser.LoadFromFile(ExtractFilePath(ParamStr(0))+('db_user.xml'));
+
+      //ClientDataSetUser.Locate('usuario;senha',VarArrayOf([user.Text,Senha.Text]),[]);
+      if(ClientDataSetUser.Locate('usuario',user.Text,[]))then
+      begin
+         if(ClientDataSetUser.Locate('senha',senha.Text,[]))then
+         begin
+            if(ClientDataSetUser.Locate('usuario;senha',VarArrayOf([user.Text,Senha.Text]),[]))then
+            begin
+               ModalResult := mrOk;
+            end;
+         end
+         else
+         begin
+            ShowMessage('Senha Invalida!');
+            Senha.BorderStyle := clRed;
+         end;
+      end
+      else
+      begin
+         ShowMessage('Usuário Invalido!');
+         user.BorderStyle := clRed;
+      end;
+   end
+   else
+   begin
+      Application.MessageBox('Arquivo não encontrado','Erro',MB_ICONSTOP);
+   end;
+   ClientDataSetUser.Close;
+end;
+
+
+
+procedure TFLogin.userClick(Sender: TObject);
+begin
+   user.Color := clWindow;
+end;
+
+procedure TFLogin.SenhaClick(Sender: TObject);
+begin
+   Senha.Color := clWindow;
+end;
+
+procedure TFLogin.userKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+   if (key = 13) then
+   begin
+      keybd_event(VK_TAB, 0, 0, 0);
+      keybd_event(VK_TAB, 0, KEYEVENTF_KEYUP, 0);
+      key := 0;
+   end;
+end;
+
+procedure TFLogin.InscrevaseClick(Sender: TObject);
+begin
+   FInscrevase := TFInscrevase.Create(nil);
+   try
+   if (FInscrevase.ShowModal = mrCancel) then
+      FInscrevase.Close;
+   finally
+      //freeandnil(FInscrevase);
+   end;
+end;
+
+
+
+end.

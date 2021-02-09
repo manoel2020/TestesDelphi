@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2020/05/28 14:54:48.000.307,=C:\Users\manoel.miranda\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2020/05/28 16:04:25.000.979,=C:\Users\manoel.miranda\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2020/05/28 16:04:44.000.468,=C:\Users\manoel.miranda\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2020/05/28 16:04:54.000.461,=C:\Users\manoel.miranda\Documents\RAD Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>2020/05/28 16:05:14.000.829,C:\Users\manoel.miranda\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\manoel.miranda\Desktop\TelaPrinciapl.pas</Transaction>
+    <Transaction>2020/05/28 16:05:14.000.829,C:\Users\manoel.miranda\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\manoel.miranda\Desktop\TelaPrinciapl.dfm</Transaction>
+    <Transaction>2020/05/28 16:05:48.000.082,C:\Users\manoel.miranda\Documents\RAD Studio\Projects\Unit2.pas=C:\Users\manoel.miranda\Desktop\Exercicio2\TelaPrincipal.pas</Transaction>
+    <Transaction>2020/05/28 16:05:48.000.082,C:\Users\manoel.miranda\Documents\RAD Studio\Projects\Unit2.dfm=C:\Users\manoel.miranda\Desktop\Exercicio2\TelaPrincipal.dfm</Transaction>
+    <Transaction>2020/05/28 16:05:59.000.495,C:\Users\manoel.miranda\Documents\RAD Studio\Projects\Project1.dproj=C:\Users\manoel.miranda\Desktop\Exercicio2\Project1.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

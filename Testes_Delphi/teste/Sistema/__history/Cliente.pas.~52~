@@ -1,0 +1,103 @@
+unit Cliente;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Grids,
+  Vcl.DBGrids, Data.DB, Datasnap.DBClient;
+
+type
+  TForm4 = class(TForm)
+    Panel1: TPanel;
+    cadastrarCliente: TButton;
+    excluirCliente: TButton;
+    editarCliente: TButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Cliente_nome: TEdit;
+    cliente_ender: TEdit;
+    cliente_telef: TEdit;
+    cliente_compl: TEdit;
+    cliente_email: TEdit;
+    DBGridCliente: TDBGrid;
+    ComboBox1: TComboBox;
+    Edit6: TEdit;
+    Button5: TButton;
+    ClientDataSetcliente: TClientDataSet;
+    DataSourceCliente: TDataSource;
+    ClientDataSetclientenome: TStringField;
+    ClientDataSetclienteendereco: TStringField;
+    ClientDataSetclientecomplemento: TStringField;
+    ClientDataSetclientetelefone: TStringField;
+    ClientDataSetclienteemail: TStringField;
+    procedure FormShow(Sender: TObject);
+    procedure cadastrarClienteClick(Sender: TObject);
+    procedure editarClienteClick(Sender: TObject);
+    procedure DBGridClienteCellClick(Column: TColumn);
+
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form4: TForm4;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm4.DBGridClienteCellClick(Column: TColumn);
+begin
+   Cliente_nome.Text  :=  ClientDataSetClientenome.AsString;
+   cliente_ender.Text := ClientDataSetClienteendereco.AsString;
+   cliente_compl.Text := ClientDataSetClientecomplemento.AsString
+   cliente_telef.Text := ClientDataSetClientetelefone.AsString
+   cliente_email.Text := ClientDataSetClienteemail.AsString
+end;
+
+procedure TForm4.editarClienteClick(Sender: TObject);
+begin
+   ClientDataSetcliente.Edit;
+   ClientDataSetClientenome.AsString := Cliente_nome.Text;
+   ClientDataSetClienteendereco.AsString := cliente_ender.Text;
+   ClientDataSetClientecomplemento.AsString := cliente_compl.Text;
+   ClientDataSetClientetelefone.AsString := cliente_telef.Text;
+   ClientDataSetClienteemail.AsString := cliente_email.Text;
+   ClientDataSetcliente.Post;
+   ClientDataSetcliente.SaveToFile(ExtractFilePath(ParamStr(0))+('db_cliente.xml'),dfXML);
+end;
+
+procedure TForm4.FormShow(Sender: TObject);
+begin
+   ClientDataSetcliente.CreateDataSet;
+   if (FileExists(ExtractFilePath(ParamStr(0))+('db_cliente.xml'))) then
+      ClientDataSetCliente.LoadFromFile(ExtractFilePath(ParamStr(0))+('db_cliente.xml'))
+   else
+      Application.MessageBox('Arquivo não encontrado','Erro',MB_ICONSTOP);
+
+end;
+
+procedure TForm4.cadastrarClienteClick(Sender: TObject);
+begin
+   ClientDataSetcliente.Append;
+   ClientDataSetClientenome.AsString := Cliente_nome.Text;
+   ClientDataSetClienteendereco.AsString := cliente_ender.Text;
+   ClientDataSetClientecomplemento.AsString := cliente_compl.Text;
+   ClientDataSetClientetelefone.AsString := cliente_telef.Text;
+   ClientDataSetClienteemail.AsString := cliente_email.Text;
+   ClientDataSetcliente.Post;
+   ClientDataSetcliente.SaveToFile(ExtractFilePath(ParamStr(0))+('db_cliente.xml'),dfXML);
+
+end;
+
+
+
+
+end.

@@ -1,0 +1,133 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+
+type
+  TForm1 = class(TForm)
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Button1: TButton;
+    procedure Button1Click(Sender: TObject);
+    function validaData(dtaInicio,dtaFim:Tedit):string;
+    function formatarData(data:Tedit):string;
+    procedure Edit1Exit(Sender: TObject);
+    procedure Edit1Enter(Sender: TObject);
+    procedure Edit2Exit(Sender: TObject);
+    procedure Edit2Enter(Sender: TObject);
+    function formatoBD(formBD: Tedit):string;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm1.Button1Click(Sender: TObject);
+var
+   retorno: string;
+begin
+   retorno := validaData(Edit1,Edit2);
+   if(retorno='OK')then
+   begin
+      ShowMessage('OK');
+   end
+   else
+   begin
+      ShowMessage(retorno);
+   end;
+end;
+
+procedure TForm1.Edit1Enter(Sender: TObject);
+begin
+   Edit1.Text := StringReplace(Edit1.Text,'/','',[rfReplaceAll]);
+end;
+
+procedure TForm1.Edit1Exit(Sender: TObject);
+begin
+   if(Length(Edit1.Text)=8)then
+   begin
+      Edit1.Text := formatarData(Edit1);
+   end;
+end;
+
+procedure TForm1.Edit2Enter(Sender: TObject);
+begin
+   Edit2.Text := StringReplace(Edit2.Text,'/','',[rfReplaceAll]);
+end;
+
+procedure TForm1.Edit2Exit(Sender: TObject);
+begin
+   if(Length(Edit2.Text)=8)then
+   begin
+      Edit2.Text := formatarData(Edit2);
+   end;
+end;
+
+function TForm1.formatarData(data:Tedit):string;
+var
+   texto: string;
+begin
+   texto := data.Text;
+   result := Copy(texto,1,2)+'/'+Copy(texto,3,2)+'/'+Copy(texto,5,4);
+end;
+
+function TForm1.validaData(dtaInicio,dtaFim:Tedit):string;
+var
+   datai,dataf:string;
+   dataInVa,dataFiVa: TDateTime;
+begin
+   datai := dtaInicio.Text;
+   dataf := dtaFim.Text;
+   if(datai<>'')then
+   begin
+      if(dataf<>'')then
+      begin
+         if(TryStrToDateTime(datai,dataInVa))then
+         begin
+            if(TryStrToDateTime(dataf,dataFiVa))then
+            begin
+               if(dataInVa <= dataFiVa)then
+               begin
+                  ShowMessage('ok');
+               end
+               else
+               begin
+                  Result := 'Data Inicial, superior a data Final';
+               end;
+            end
+            else
+            begin
+               Result := 'Data Final Invalida. verifique';
+            end;
+         end
+         else
+         begin
+            Result := 'Data Inicial Invalida. verifique';
+         end;
+      end
+      else
+      begin
+         Result := 'Data Fim Vazio!';
+      end;
+   end
+   else
+   begin
+      Result := 'Data Inicio Vazio!';
+   end;
+end;
+
+function TForm1.formatoBD(formBD: Tedit):string;
+begin
+   //aqui formata para o formato do BD
+end;
+end.

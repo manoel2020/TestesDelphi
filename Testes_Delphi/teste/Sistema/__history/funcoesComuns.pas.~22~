@@ -1,0 +1,17 @@
+unit funcoesComuns;
+
+interface
+
+implementation
+
+procedure LimpaCampos(Form :String);
+var
+i: Integer;
+begin
+   for i := 0 to Form.ComponentCount -1 do
+   begin
+   if Form.Components[i] is TEdit then
+   TEdit(Form.Components[i]).Clear;
+   end;
+end;
+end.

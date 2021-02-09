@@ -1,0 +1,15 @@
+unit processo;
+
+interface
+   procedure loign(const user, senha:String);
+implementation
+
+procedure login(user,senha:string);
+begin
+   if((user='123')and(senha='123'))then
+   begin
+
+   end;
+end;
+
+end.

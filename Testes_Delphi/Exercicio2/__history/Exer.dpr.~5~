@@ -1,0 +1,19 @@
+program Exer;
+
+uses
+  Vcl.Forms,
+  Principal in 'Principal.pas' {Form1},
+  Menu in 'Menu.pas' {Form2},
+  Util in 'Util.pas',
+  FormPrinciap in 'FormPrinciap.pas' {Form3},
+  Unit4 in 'Unit4.pas' {Form4};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TForm3, Form3);
+  Application.CreateForm(TForm4, Form4);
+  Application.Run;
+end.

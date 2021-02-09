@@ -1,0 +1,31 @@
+object Form2: TForm2
+  Left = 0
+  Top = 0
+  Caption = 'Form2'
+  ClientHeight = 693
+  ClientWidth = 1005
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object SpeedButton2: TSpeedButton
+    Left = 400
+    Top = 376
+    Width = 105
+    Height = 22
+    Caption = 'Gerar Mes'
+  end
+  object DateEdit1: TDateEdit
+    Left = 336
+    Top = 312
+    Width = 121
+    Height = 21
+    NumGlyphs = 2
+    TabOrder = 0
+  end
+end

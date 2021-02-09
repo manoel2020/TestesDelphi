@@ -1,0 +1,236 @@
+unit Produto;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Grids,
+  Vcl.DBGrids, Data.DB, Datasnap.DBClient, funcoesComuns;
+
+type
+  TFProduto = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Produt_nome: TEdit;
+    Produt_marca: TEdit;
+    Produt_qtd: TEdit;
+    Produt_precoc: TEdit;
+    Produt_fornecedor: TComboBox;
+    Label6: TLabel;
+    CadastrarProduto: TButton;
+    EditarProduto: TButton;
+    ExcluirProduto: TButton;
+    ComboBox1: TComboBox;
+    Edit6: TEdit;
+    Pesquisar: TButton;
+    DBGridProduto: TDBGrid;
+    ClientDataSetProduto: TClientDataSet;
+    DataSourceProduto: TDataSource;
+    ClientDataSetProdutodescricao: TStringField;
+    ClientDataSetProdutomarca: TStringField;
+    ClientDataSetProdutoprecocusto: TStringField;
+    ClientDataSetFornecedor: TClientDataSet;
+    ClientDataSetFornecedorempresa: TStringField;
+    ClientDataSetFornecedorrazaosocial: TStringField;
+    ClientDataSetFornecedorcomplemento: TStringField;
+    ClientDataSetFornecedortelefone: TStringField;
+    ClientDataSetFornecedoremail: TStringField;
+    ClientDataSetProdutoquantidade: TStringField;
+    Label2: TLabel;
+    produt_cod: TEdit;
+    ClientDataSetProdutocodigo: TIntegerField;
+    ClientDataSetFornecedorcodigo: TIntegerField;
+    ClientDataSetProdutocodfornecedor: TIntegerField;
+    procedure FormShow(Sender: TObject);
+    procedure CadastrarProdutoClick(Sender: TObject);
+    procedure EditarProdutoClick(Sender: TObject);
+    procedure DBGridProdutoCellClick(Column: TColumn);
+    procedure ExcluirProdutoClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure PesquisarClick(Sender: TObject);
+    procedure ComboBox1Enter(Sender: TObject);
+  private
+    procedure limpaCombo;
+    procedure AtribuiNulo(Sender: TField; var Text: String;
+      DisplayText: Boolean);
+    function percorreCombo(Combobox: TCombobox; conteudo: string; posicao,
+      quantidade: integer): integer;
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FProduto: TFProduto;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFProduto.limpaCombo;
+begin
+   Produt_fornecedor.ItemIndex := 0;
+end;
+
+//Essa procedure pega o codigo que foi salvo no xml, pesquisa no client fornecedor e retorna o nome.
+procedure TFProduto.AtribuiNulo(Sender: TField; var Text: String; DisplayText: Boolean);
+begin
+   if ClientDataSetFornecedor.Locate('codigo', Sender.AsString, []) then
+      Text := ClientDataSetFornecedorempresa.AsString
+   else
+      Text := Sender.AsString;
+end;
+
+procedure TFProduto.CadastrarProdutoClick(Sender: TObject);
+var
+posicao: integer;
+begin
+   if( ClientDataSetProduto.IsEmpty ) then
+   begin
+      ClientDataSetProduto.CreateDataSet;
+   end;
+   ClientDataSetProduto.Append;
+   ClientDataSetProdutocodigo.AsInteger := StrToInt(produt_cod.Text);
+   ClientDataSetProdutodescricao.AsString := Produt_nome.Text;
+   ClientDataSetProdutomarca.AsString := Produt_marca.Text;
+   ClientDataSetProdutoquantidade.AsString := Produt_qtd.Text;
+   ClientDataSetProdutoprecocusto.AsString := Produt_precoc.Text;
+   posicao := pos('-',Produt_fornecedor.Text);
+   ClientDataSetProdutocodfornecedor.AsInteger := StrToInt(Copy(Produt_fornecedor.text,1,posicao-1));
+   ClientDataSetProduto.Post;
+   ClientDataSetProduto.SaveToFile(ExtractFilePath(ParamStr(0))+('db_produto.xml'));
+   LimpaCampos(self);
+   limpaCombo;
+   produt_cod.Text := IntToStr(ClientDataSetProduto.RecordCount + 1);
+end;
+
+procedure TFProduto.ComboBox1Enter(Sender: TObject);
+begin
+   Edit6.Clear;
+   ClientDataSetProduto.Filter   := '';
+   ClientDataSetProduto.Filtered := false;
+end;
+
+procedure TFProduto.DBGridProdutoCellClick(Column: TColumn);
+var
+numero:integer;
+begin
+   produt_cod.Text := IntToStr(ClientDataSetProdutocodigo.AsInteger);
+   Produt_nome.Text := ClientDataSetProdutodescricao.AsString;
+   Produt_marca.Text := ClientDataSetProdutomarca.AsString;
+   Produt_qtd.Text := ClientDataSetProdutoquantidade.AsString;
+   Produt_precoc.Text := ClientDataSetProdutoprecocusto.AsString;
+   numero:= ClientDataSetProdutocodfornecedor.AsInteger;
+   Produt_fornecedor.ItemIndex := percorreCombo(Produt_fornecedor,IntToStr(numero),1,1);
+   //Produt_fornecedor.ItemIndex := Produt_fornecedor.Items.IndexOf(IntToStr(numero));
+   //Produt_fornecedor.ItemIndex := ClientDataSetProdutocodfornecedor.AsInteger;
+end;
+
+function TFProduto.percorreCombo(Combobox:TCombobox;conteudo:string;posicao,quantidade:integer):integer;
+var
+  I: Integer;
+  textoCor:string;
+begin
+   result := -1;
+   for I := 0 to Combobox.Items.Count - 1 do
+   begin
+      textoCor := (Copy(Combobox.Items[i],posicao,quantidade));
+      if(textoCor = conteudo)then
+      begin
+         result := i;
+         break;
+      end;
+   end;
+end;
+
+procedure TFProduto.EditarProdutoClick(Sender: TObject);
+var
+posicao: integer;
+begin
+   ClientDataSetProduto.Edit;
+   ClientDataSetProdutodescricao.AsString := Produt_nome.Text;
+   ClientDataSetProdutomarca.AsString := Produt_marca.Text;
+   ClientDataSetProdutoquantidade.AsString := Produt_qtd.Text;
+   ClientDataSetProdutoprecocusto.AsString := Produt_precoc.Text;
+   posicao := pos('-',Produt_fornecedor.Text);
+   ClientDataSetProdutocodfornecedor.AsInteger := StrToInt(Copy(Produt_fornecedor.text,1,posicao-1));
+   ClientDataSetProduto.Post;
+   ClientDataSetProduto.SaveToFile(ExtractFilePath(ParamStr(0))+('db_produto.xml'));
+   LimpaCampos(self);
+   limpaCombo;
+   produt_cod.Text := IntToStr(ClientDataSetProduto.RecordCount + 1);
+end;
+
+procedure TFProduto.ExcluirProdutoClick(Sender: TObject);
+begin
+   ClientDataSetProduto.Delete;
+   ClientDataSetProduto.SaveToFile(ExtractFilePath(ParamStr(0))+('db_produto.xml'));
+   LimpaCampos(self);
+   limpaCombo;
+   produt_cod.Text := IntToStr(ClientDataSetProduto.RecordCount + 1);
+end;
+
+procedure TFProduto.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+   Action := caFree;//Limpa a Memoria
+end;
+
+procedure TFProduto.FormShow(Sender: TObject);
+begin
+   ClientDataSetFornecedor.CreateDataSet;
+   //Verifica se existe a ClientDataSet do fornecedor se não cria para povoar o combobox;
+   if(FileExists(ExtractFilePath(ParamStr(0))+('db_fornecedor.xml')))then
+   begin
+      ClientDataSetfornecedor.LoadFromFile(ExtractFilePath(ParamStr(0))+('db_fornecedor.xml'));
+      //O While abaixo é para percorrer o XML Fornecedor e povoar o combobox.
+      ClientDataSetfornecedor.First;
+      while not (ClientDataSetfornecedor.Eof) do
+      begin
+         Produt_fornecedor.Items.Add(ClientDataSetFornecedorcodigo.AsString+'-'+ClientDataSetFornecedorempresa.AsString);
+         ClientDataSetfornecedor.Next;
+      end;
+   end;
+   ClientDataSetProduto.CreateDataSet;
+   ClientDataSetProduto.FieldByName('codfornecedor').OnGetText := AtribuiNulo;
+   //Verifica se o arquivo existe, se existir carrega o arquivo.
+   if (FileExists(ExtractFilePath(ParamStr(0))+('db_produto.xml'))) then
+   begin
+      ClientDataSetProduto.LoadFromFile(ExtractFilePath(ParamStr(0))+('db_produto.xml'));
+   end
+   else
+   begin
+      Application.MessageBox('db_produto não encontrado!','Erro',MB_ICONSTOP);
+   end;
+   produt_cod.Text := IntToStr(ClientDataSetProduto.RecordCount + 1);
+end;
+
+procedure TFProduto.PesquisarClick(Sender: TObject);
+const
+   PCodigo = 0;
+   PFornecedor = 5;
+begin
+   ClientDataSetProduto.Filtered := false;
+   ClientDataSetProduto.Filter := '';
+   if(ComboBox1.ItemIndex = PCodigo)then
+   begin
+      ClientDataSetProduto.Filter := ComboBox1.Text + '='+Edit6.Text;
+   end
+   else if(ComboBox1.ItemIndex = PFornecedor)then
+   begin
+      if(ClientDataSetFornecedor.Locate('empresa', Edit6.Text,[loPartialKey,loCaseInsensitive]))then
+      begin
+         ClientDataSetProduto.Filter := ComboBox1.Text + '='+ClientDataSetFornecedorcodigo.AsString;
+      end;
+   end
+   else
+   begin
+      ClientDataSetProduto.Filter := ComboBox1.Text + ' like ''%'+Edit6.Text+'%''';
+   end;
+
+   ClientDataSetProduto.Filtered := true;
+end;
+
+end.

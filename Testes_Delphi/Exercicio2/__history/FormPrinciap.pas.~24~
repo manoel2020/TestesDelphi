@@ -1,0 +1,37 @@
+unit FormPrinciap;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Unit4;
+
+type
+  TForm3 = class(TForm)
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form3: TForm3;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm3.FormCreate(Sender: TObject);
+begin
+   Form4 := TForm4.Create(nil);
+   try
+      if (Form4.ShowModal = mrCancel) then
+         Application.Terminate;
+         //Application.Terminate;
+   finally
+      freeandnil(Form4);
+   end;
+end;
+
+end.

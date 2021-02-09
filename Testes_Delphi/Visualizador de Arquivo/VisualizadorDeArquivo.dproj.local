@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2020/10/22 20:36:18.000.918,=C:\Users\Ursão-PC\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2021/01/23 15:07:49.000.339,=C:\Users\Ursão-PC\Documents\RAD Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2021/01/23 15:08:20.000.778,C:\Users\Ursão-PC\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Ursão-PC\Desktop\TESTES NO Delphi\Visualizador de Arquivo\FVisualizador.pas</Transaction>
+    <Transaction>2021/01/23 15:08:20.000.778,C:\Users\Ursão-PC\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Ursão-PC\Desktop\TESTES NO Delphi\Visualizador de Arquivo\FVisualizador.dfm</Transaction>
+    <Transaction>2021/01/23 15:10:46.000.858,C:\Users\Ursão-PC\Documents\RAD Studio\Projects\Project1.dproj=C:\Users\Ursão-PC\Desktop\TESTES NO Delphi\Visualizador de Arquivo\VisualizadorDeArquivo.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

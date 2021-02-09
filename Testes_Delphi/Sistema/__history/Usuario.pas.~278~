@@ -1,0 +1,181 @@
+unit Usuario;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, Vcl.DBGrids,
+  Vcl.ExtCtrls, Data.DB, Datasnap.DBClient, funcoesComuns;
+
+type
+  TFUsuario = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    User_senha: TEdit;
+    User_usuario: TEdit;
+    User_Nome: TEdit;
+    DBGridUser: TDBGrid;
+    ExcluirUsuario: TButton;
+    EditarUsuario: TButton;
+    CadastrarUsuario: TButton;
+    ComboBox1: TComboBox;
+    btnPesquisar: TButton;
+    Edit4: TEdit;
+    Perfiluser: TComboBox;
+    Label4: TLabel;
+    ClientDataSetUser: TClientDataSet;
+    DataSourceUser: TDataSource;
+    ClientDataSetUsernome: TStringField;
+    ClientDataSetUserusuario: TStringField;
+    ClientDataSetUsersenha: TStringField;
+    user_cod: TEdit;
+    Label5: TLabel;
+    ClientDataSetUsercodigo: TIntegerField;
+    ClientDataSetUserperfil: TIntegerField;
+    procedure CadastrarUsuarioClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure EditarUsuarioClick(Sender: TObject);
+    procedure ExcluirUsuarioClick(Sender: TObject);
+    procedure DBGridUserCellClick(Column: TColumn);
+    procedure btnPesquisarClick(Sender: TObject);
+    procedure ComboBox1Enter(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    procedure limpaCombo;
+    procedure AtribuiNulo(Sender: TField; var Text: String;
+      DisplayText: Boolean);
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FUsuario: TFUsuario;
+
+implementation
+
+{$R *.dfm}
+procedure TFUsuario.limpaCombo;
+begin
+   Perfiluser.ItemIndex:=0;
+end;
+
+//Essa procedure pega o codigo que foi salvo no xml, pesquisa no cliente fornecedor e retorna o nome.
+procedure TFUsuario.AtribuiNulo(Sender: TField; var Text: String; DisplayText: Boolean);
+begin
+   if(Sender.AsInteger = 1)then
+   begin
+      Text:='Vendedor';
+   end
+   else if(Sender.AsInteger = 2) then
+   begin
+      Text:='Administrador';
+   end;
+end;
+
+procedure TFUsuario.DBGridUserCellClick(Column: TColumn);
+begin
+   user_cod.Text := IntToStr(ClientDataSetUsercodigo.AsInteger);
+   User_Nome.Text := ClientDataSetUsernome.AsString;
+   User_usuario.Text := ClientDataSetUserusuario.AsString;
+   User_senha.Text := ClientDataSetUsersenha.AsString;
+   Perfiluser.ItemIndex := ClientDataSetUserperfil.AsInteger;
+   //Perfiluser.ItemIndex := Perfiluser.Items.IndexOf(ClientDataSetUserperfil.AsInteger);
+   //Perfiluser.Items[Perfiluser.ItemIndex()] := ClientDataSetUserperfil.AsInteger;
+end;
+
+procedure TFUsuario.EditarUsuarioClick(Sender: TObject);
+var
+   posicao:integer;
+begin
+   ClientDataSetUser.Edit;
+   ClientDataSetUsercodigo.AsInteger := StrToInt(user_cod.Text);
+   ClientDataSetUsernome.AsString := User_Nome.Text;
+   ClientDataSetUserusuario.AsString := User_usuario.Text;
+   ClientDataSetUsersenha.AsString := User_senha.Text;
+   posicao := Pos('-',Perfiluser.Text);
+   ClientDataSetUserperfil.AsInteger := StrToInt(copy(Perfiluser.Text,1,posicao-1));
+   ClientDataSetUser.Post;
+   ClientDataSetUser.SaveToFile(ExtractFilePath(ParamStr(0))+('db_user.xml'),dfXML);
+   LimpaCampos(self);
+   limpaCombo;
+   user_cod.Text := IntToStr(ClientDataSetUser.RecordCount + 1);
+end;
+
+procedure TFUsuario.ExcluirUsuarioClick(Sender: TObject);
+begin
+   ClientDataSetUser.Delete;
+   ClientDataSetUser.SaveToFile(ExtractFilePath(ParamStr(0))+('db_user.xml'), dfXML);
+   LimpaCampos(self);
+   limpaCombo;
+   user_cod.Text := IntToStr(ClientDataSetUser.RecordCount + 1);
+end;
+
+procedure TFUsuario.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+   Action := caFree;//Limpa a Memoria
+end;
+
+procedure TFUsuario.FormShow(Sender: TObject);
+begin
+   ClientDataSetUser.CreateDataSet;
+   ClientDataSetUser.FieldByName('perfil').OnGetText := AtribuiNulo;
+   if (FileExists(ExtractFilePath(ParamStr(0))+('db_user.xml'))) then
+   begin
+      ClientDataSetUser.LoadFromFile(ExtractFilePath(ParamStr(0))+('db_user.xml'));
+   end
+   else
+   begin
+      Application.MessageBox('Arquivo não encontrado','Erro',MB_ICONSTOP);
+   end;
+   user_cod.Text := IntToStr(ClientDataSetUser.RecordCount + 1);
+end;
+
+procedure TFUsuario.btnPesquisarClick(Sender: TObject);
+var
+pesquisa:string;
+begin
+   ClientDataSetUser.Filtered := false;
+   ClientDataSetUser.Filter   := '';
+   pesquisa := strToInt(edit4.Text);
+//   ClientDataSetfornecedor.Filter   := ComboBox1.Text + '=' + QuotedStr(Edit6.Text);
+   ClientDataSetUser.Filter   := ComboBox1.Text + ' like ''%' + pesquisa + '%''';
+   ClientDataSetUser.Filtered := true;
+end;
+
+procedure TFUsuario.CadastrarUsuarioClick(Sender: TObject);
+var
+   posicao: integer;
+begin
+   if(Perfiluser.ItemIndex <> 0)then
+   begin
+      ClientDataSetUser.Append;
+      ClientDataSetUsercodigo.AsInteger := StrToInt(user_cod.Text);
+      ClientDataSetUsernome.AsString := User_Nome.Text;
+      ClientDataSetUserusuario.AsString := User_usuario.Text;
+      ClientDataSetUsersenha.AsString := User_senha.Text;
+      posicao := Pos('-',Perfiluser.Text);
+      ClientDataSetUserperfil.AsInteger := StrToInt(copy(Perfiluser.Text,1,posicao-1));
+      ClientDataSetUser.Post;
+      ClientDataSetUser.SaveToFile(ExtractFilePath(ParamStr(0))+('db_user.xml'),dfXML);
+      LimpaCampos(self);
+      limpaCombo;
+      user_cod.Text := IntToStr(ClientDataSetUser.RecordCount + 1);
+   end
+   else
+   begin
+      Application.MessageBox('Selecione um perfil valido','Erro',MB_ICONSTOP);
+   end;
+end;
+
+
+procedure TFUsuario.ComboBox1Enter(Sender: TObject);
+begin
+   Edit4.Clear;
+   ClientDataSetUser.Filter   := '';
+   ClientDataSetUser.Filtered := false;
+end;
+
+end.

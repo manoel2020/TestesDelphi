@@ -1,0 +1,20 @@
+unit Util;
+
+interface
+
+procedure ExibeMensagem(const fmensagem, ftitulo:String);
+
+implementation
+
+uses
+  Vcl.Forms, Winapi.Windows;
+
+var
+   fquantidade:String;
+
+procedure ExibeMensagem(const fmensagem, ftitulo:String);
+begin
+   application.MessageBox(pchar(fmensagem), fTitulo, MB_ICONINFORMATION+MB_OK);
+end;
+
+end.

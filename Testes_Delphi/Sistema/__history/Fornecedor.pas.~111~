@@ -1,0 +1,158 @@
+unit Fornecedor;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls,
+  Vcl.ExtCtrls, Data.DB, Datasnap.DBClient, funcoesComuns;
+
+type
+  TFFornecedor = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    forne_nome: TEdit;
+    forne_razaos: TEdit;
+    forne_telefone: TEdit;
+    forne_comple: TEdit;
+    forne_email: TEdit;
+    CadastrarFornecedor: TButton;
+    EditarFornecedor: TButton;
+    ExcluirFornecedor: TButton;
+    ComboBox1: TComboBox;
+    Edit6: TEdit;
+    Button5: TButton;
+    DBGridfornecedor: TDBGrid;
+    ClientDataSetfornecedor: TClientDataSet;
+    DataSourceFornecedor: TDataSource;
+    ClientDataSetfornecedorempresa: TStringField;
+    ClientDataSetfornecedorrazaosocial: TStringField;
+    ClientDataSetfornecedorcomplemento: TStringField;
+    ClientDataSetfornecedortelefone: TStringField;
+    ClientDataSetfornecedoremail: TStringField;
+    forne_cod: TEdit;
+    Label6: TLabel;
+    ClientDataSetfornecedorcodigo: TIntegerField;
+    procedure FormShow(Sender: TObject);
+    procedure CadastrarFornecedorClick(Sender: TObject);
+    procedure EditarFornecedorClick(Sender: TObject);
+    procedure DBGridfornecedorCellClick(Column: TColumn);
+    procedure ExcluirFornecedorClick(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure ComboBox1DrawItem(Control: TWinControl; Index: Integer;
+      Rect: TRect; State: TOwnerDrawState);
+    procedure ComboBox1Enter(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+
+  public
+    { Public declarations }
+  end;
+
+var
+  FFornecedor: TFFornecedor;
+
+implementation
+
+{$R *.dfm}
+
+//cliando o filtro para o dataset
+procedure TFFornecedor.Button5Click(Sender: TObject);
+const
+   PCodigo = 0;
+begin
+//   ClientDataSetfornecedor.Locate('nome','Robson',[]);
+//   ClientDataSetfornecedor.Delete;
+   ClientDataSetfornecedor.Filtered := false;
+   ClientDataSetfornecedor.Filter   := '';
+//   ClientDataSetfornecedor.Filter   := ComboBox1.Text + '=' + QuotedStr(Edit6.Text);
+   ClientDataSetfornecedor.Filter   := ComboBox1.Text + ' like ''%' + Edit6.Text + '%''';
+   ClientDataSetfornecedor.Filtered := true;
+   //retorna a quantidade de linha que tem no dataset
+   //ShowMessage(InttoStr(ClientDataSetfornecedor.RecordCount));
+end;
+
+procedure TFFornecedor.ComboBox1Enter(Sender: TObject);
+begin
+   Edit6.Clear;
+   ClientDataSetfornecedor.Filter   := '';
+   ClientDataSetfornecedor.Filtered := false;
+end;
+
+procedure TFFornecedor.CadastrarFornecedorClick(Sender: TObject);
+begin
+   forne_cod.Text := IntToStr(ClientDataSetfornecedor.RecordCount + 1);
+   ClientDataSetfornecedor.Append;
+   ClientDataSetfornecedorcodigo.AsInteger := StrToInt(forne_cod.Text);
+   ClientDataSetfornecedorempresa.AsString := forne_nome.Text;
+   ClientDataSetfornecedorrazaosocial.AsString := forne_razaos.Text;
+   ClientDataSetfornecedorcomplemento.AsString := forne_comple.Text;
+   ClientDataSetfornecedortelefone.AsString := forne_telefone.Text;
+   ClientDataSetfornecedoremail.AsString := forne_email.Text;
+   ClientDataSetfornecedor.Post;
+   ClientDataSetfornecedor.SaveToFile(ExtractFilePath(ParamStr(0))+('db_fornecedor.xml'));
+   LimpaCampos(self);
+   forne_cod.Text := IntToStr(ClientDataSetfornecedor.RecordCount + 1);
+end;
+
+procedure TFFornecedor.ComboBox1DrawItem(Control: TWinControl; Index: Integer;
+  Rect: TRect; State: TOwnerDrawState);
+begin
+   edit6.Clear;
+end;
+
+procedure TFFornecedor.DBGridfornecedorCellClick(Column: TColumn);
+begin
+   forne_cod.Text := ClientDataSetfornecedorcodigo.AsString;
+   forne_nome.Text := ClientDataSetfornecedorempresa.AsString;
+   forne_razaos.Text:= ClientDataSetfornecedorrazaosocial.AsString;
+   forne_comple.Text := ClientDataSetfornecedorcomplemento.AsString;
+   forne_telefone.Text := ClientDataSetfornecedortelefone.AsString;
+   forne_email.Text := ClientDataSetfornecedoremail.AsString;
+end;
+
+procedure TFFornecedor.EditarFornecedorClick(Sender: TObject);
+begin
+   ClientDataSetfornecedor.Edit;
+   ClientDataSetfornecedorcodigo.AsInteger := StrToInt(forne_cod.Text);
+   ClientDataSetfornecedorempresa.AsString := forne_nome.Text;
+   ClientDataSetfornecedorrazaosocial.AsString := forne_razaos.Text;
+   ClientDataSetfornecedorcomplemento.AsString := forne_comple.Text;
+   ClientDataSetfornecedortelefone.AsString := forne_telefone.Text;
+   ClientDataSetfornecedoremail.AsString := forne_email.Text;
+   ClientDataSetfornecedor.Post;
+   ClientDataSetfornecedor.SaveToFile(ExtractFilePath(ParamStr(0))+('db_fornecedor.xml'));
+   LimpaCampos(self);
+   forne_cod.Text := IntToStr(ClientDataSetfornecedor.RecordCount + 1);
+end;
+
+procedure TFFornecedor.ExcluirFornecedorClick(Sender: TObject);
+begin
+   ClientDataSetfornecedor.Delete;
+   ClientDataSetfornecedor.SaveToFile(ExtractFilePath(ParamStr(0))+('db_fornecedor.xml'));
+   LimpaCampos(self);
+   forne_cod.Text := IntToStr(ClientDataSetfornecedor.RecordCount + 1);
+end;
+
+procedure TFFornecedor.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+   Action := caFree;//Limpa a Memoria
+end;
+
+procedure TFFornecedor.FormShow(Sender: TObject);
+begin
+   ClientDataSetfornecedor.CreateDataSet;
+   if (FileExists(ExtractFilePath(ParamStr(0))+('db_fornecedor.xml'))) then
+      ClientDataSetfornecedor.LoadFromFile(ExtractFilePath(ParamStr(0))+('db_fornecedor.xml'))
+   else
+      Application.MessageBox('Arquivo não encontrado','Erro',MB_ICONSTOP);
+
+      forne_cod.Text := IntToStr(ClientDataSetfornecedor.RecordCount + 1);
+end;
+
+end.

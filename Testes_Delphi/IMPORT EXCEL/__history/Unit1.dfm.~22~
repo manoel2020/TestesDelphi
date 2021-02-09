@@ -1,0 +1,127 @@
+object bU: TbU
+  Left = 0
+  Top = 0
+  Caption = 'bU'
+  ClientHeight = 373
+  ClientWidth = 634
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Button1: TButton
+    Left = 8
+    Top = 16
+    Width = 169
+    Height = 25
+    Caption = 'Carregar Arquivo'
+    TabOrder = 0
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 8
+    Top = 342
+    Width = 169
+    Height = 25
+    Caption = 'Importar Arquivo'
+    TabOrder = 1
+  end
+  object RadioTipo: TRadioGroup
+    Left = 8
+    Top = 54
+    Width = 377
+    Height = 41
+    Caption = 'Tipo de Importa'#231#227'o'
+    Columns = 3
+    Items.Strings = (
+      'Cesta B'#225'sica'
+      'Destaques do M'#234's'
+      'Livros')
+    TabOrder = 2
+  end
+  object DBGrid1: TDBGrid
+    Left = 8
+    Top = 101
+    Width = 609
+    Height = 235
+    DataSource = DataSource1
+    TabOrder = 3
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+  end
+  object FileOpenDialog1: TFileOpenDialog
+    FavoriteLinks = <>
+    FileTypes = <>
+    Options = []
+    Left = 368
+    Top = 16
+  end
+  object DtaSetCestaBasica: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 544
+    Top = 16
+    object DtaSetCestaBasicaEMPRESA: TStringField
+      FieldName = 'EMPRESA'
+      Size = 10
+    end
+    object DtaSetCestaBasicaMATRICULA: TStringField
+      FieldName = 'MATRICULA'
+      Size = 10
+    end
+    object DtaSetCestaBasicaCOLABORADOR: TStringField
+      DisplayWidth = 50
+      FieldName = 'COLABORADOR'
+      Size = 100
+    end
+    object DtaSetCestaBasicaCOMPETENCIA: TStringField
+      FieldName = 'COMPETENCIA'
+      Size = 4
+    end
+    object DtaSetCestaBasicaDATA_RECEBIMENTO: TStringField
+      FieldName = 'DATA_RECEBIMENTO'
+      Size = 10
+    end
+  end
+  object DataSource1: TDataSource
+    Left = 448
+    Top = 16
+  end
+  object DtaSetDestaqueMes: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    Left = 552
+    Top = 64
+    object DtaSetDestaqueMesEMPRESA: TStringField
+      FieldName = 'EMPRESA'
+      Size = 3
+    end
+    object DtaSetDestaqueMesMATRICULA: TStringField
+      FieldName = 'MATRICULA'
+      Size = 3
+    end
+    object DtaSetDestaqueMesCOLABORADOR: TStringField
+      FieldName = 'COLABORADOR'
+      Size = 60
+    end
+    object DtaSetDestaqueMesDATA_DESTAQUE: TStringField
+      FieldName = 'DATA_DESTAQUE'
+      Size = 10
+    end
+    object DtaSetDestaqueMesMOTIVO_DESTAQUE: TStringField
+      FieldName = 'MOTIVO_DESTAQUE'
+      Size = 50
+    end
+    object DtaSetDestaqueMesOBSERVACAO: TStringField
+      FieldName = 'OBSERVACAO'
+      Size = 255
+    end
+  end
+end

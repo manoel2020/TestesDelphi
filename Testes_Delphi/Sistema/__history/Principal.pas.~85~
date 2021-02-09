@@ -1,0 +1,92 @@
+unit Principal;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, Login, Usuario, Cliente, Fornecedor, Produto;
+
+type
+  TFPrincipal = class(TForm)
+    Menus: TMainMenu;
+    Cadastro1: TMenuItem;
+    Usurio1: TMenuItem;
+    Cliente1: TMenuItem;
+    Fornecedor1: TMenuItem;
+    Produto1: TMenuItem;
+    procedure FormCreate(Sender: TObject);
+    procedure Usurio1Click(Sender: TObject);
+    procedure Cliente1Click(Sender: TObject);
+    procedure Fornecedor1Click(Sender: TObject);
+    procedure Produto1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FPrincipal: TFPrincipal;
+
+implementation
+
+{$R *.dfm}
+//Form5
+procedure TFPrincipal.Cliente1Click(Sender: TObject);
+begin
+   FCliente := TFCliente.Create(nil);
+   try
+   if (FCliente.ShowModal = mrCancel) then
+   //
+   finally
+      freeandnil(FCliente);
+   end;
+end;
+
+procedure TFPrincipal.FormCreate(Sender: TObject);
+begin
+   FLogin := TFLogin.Create(nil);
+   try
+   if (FLogin.ShowModal = mrCancel) then
+      Application.Terminate;
+   finally
+      freeandnil(FLogin);
+   end;
+end;
+
+procedure TFPrincipal.Fornecedor1Click(Sender: TObject);
+begin
+   FFornecedor := TFFornecedor.Create(nil);
+   try
+   if (FFornecedor.ShowModal = mrCancel) then
+   //
+   finally
+      freeandnil(FFornecedor);
+   end;
+end;
+
+procedure TFPrincipal.Produto1Click(Sender: TObject);
+begin
+   if(not Assigned(FProduto))then//se o form não existe cria o mesmo.
+   begin
+      FProduto := TFProduto.Create(nil);
+   end
+   else
+   begin
+      FProduto.WindowState :=  wsMaximized;
+      FProduto.Show;
+   end;
+end;
+
+procedure TFPrincipal.Usurio1Click(Sender: TObject);
+begin
+   FUsuario := TFUsuario.Create(nil);
+   try
+   if (FUsuario.ShowModal = mrCancel) then
+   //
+   finally
+      freeandnil(FUsuario);
+   end;
+end;
+
+end.

@@ -1,0 +1,18 @@
+unit processo;
+
+interface
+procedure login(const user, senha:String);
+implementation
+
+uses
+  Vcl.Dialogs;
+
+procedure login(user,senha:string);
+begin
+   if((user='123')and(senha='123'))then
+   begin
+      Showmessage('Login OK');
+   end;
+end;
+
+end.

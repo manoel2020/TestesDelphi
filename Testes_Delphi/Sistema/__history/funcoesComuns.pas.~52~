@@ -1,0 +1,27 @@
+unit funcoesComuns;
+
+
+interface
+
+uses Vcl.Forms, Vcl.StdCtrls;
+
+procedure LimpaCampos(const NomeForm: tform);
+
+implementation
+
+procedure LimpaCampos(const NomeForm: tform);
+var
+i: Integer;
+begin
+   for i := 0 to NomeForm.ComponentCount -1 do
+   begin
+   if NomeForm.Components[i] is TEdit then
+      TEdit(NomeForm.Components[i]).Clear;
+   end
+   else if(NomeForm.Components[i] is TComboBox)then
+   begin
+
+   end;
+end;
+
+end.

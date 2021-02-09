@@ -1,0 +1,12 @@
+unit processo;
+
+interface
+   procedure loign(const user, senha:String);
+implementation
+
+procedure login(user,senha:string);
+begin
+
+end;
+
+end.

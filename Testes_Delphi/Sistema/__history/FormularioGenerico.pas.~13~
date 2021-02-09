@@ -1,0 +1,54 @@
+unit FormularioGenerico;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, Vcl.DBGrids,
+  Data.DB, Datasnap.DBClient;
+
+type
+  TFormGenerico = class(TForm)
+    DBGrid1: TDBGrid;
+    Edit1: TEdit;
+    ClientDataSet1: TClientDataSet;
+    DataSource1: TDataSource;
+    procedure Edit1Change(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormGenerico: TFormGenerico;
+
+
+implementation
+
+{$R *.dfm}
+var
+    CampoPesquisa:String;
+  CampoRetorno:String;
+  Resultado:String;
+  Dados:String;
+
+procedure TFormGenerico.DBGrid1DblClick(Sender: TObject);
+begin
+   Resultado := ClientDataSet1.FieldByName(CampoRetorno).AsString;
+end;
+
+procedure TFormGenerico.Edit1Change(Sender: TObject);
+begin
+   ClientDataSet1.Locate(CampoPesquisa, Edit1.Text, [loCaseInsensitive, loPartialKey]);
+end;
+
+procedure TFormGenerico.FormShow(Sender: TObject);
+begin
+   if (FileExists(Dados)) then
+      ClientDataSet1.LoadFromFile(Dados);
+end;
+
+end.

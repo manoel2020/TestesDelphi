@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2020/06/01 18:00:59.000.980,=rtl.dcp</Transaction>
+    <Transaction>2020/06/01 18:01:45.000.975,E:\Users\Desktop\TesteWizard\NewItems.dproj=E:\Users\Documents\RAD Studio\Projects\Package1.dproj</Transaction>
+    <Transaction>2020/06/01 18:02:55.000.049,=designide.dcp</Transaction>
+    <Transaction>2020/06/01 18:03:23.000.747,=E:\Users\Desktop\TesteWizard\Unit1.pas</Transaction>
+    <Transaction>2020/06/01 18:03:52.000.091,E:\Users\Desktop\TesteWizard\uVisualizadorDataSets.pas=E:\Users\Desktop\TesteWizard\Unit1.pas</Transaction>
+    <Transaction>2020/06/01 21:19:41.000.865,=vcldb.dcp</Transaction>
+    <Transaction>2020/06/01 21:19:41.000.836,=dsnap.dcp</Transaction>
+    <Transaction>2020/06/01 21:19:41.000.851,=dbrtl.dcp</Transaction>
+    <Transaction>2020/06/01 21:59:18.000.149,=C:\Windows\system32\PluginPluginName.pas</Transaction>
+  </Transactions>
+</BorlandProject>

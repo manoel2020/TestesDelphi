@@ -1,0 +1,34 @@
+unit configuracao;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls;
+
+type
+  TFormConfiguracao = class(TForm)
+    RadioGroupParametros: TRadioGroup;
+    ButtonConfConfiguracao: TButton;
+    procedure ButtonConfConfiguracaoClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormConfiguracao: TFormConfiguracao;
+
+implementation
+
+{$R *.dfm}
+
+uses Venda;
+
+procedure TFormConfiguracao.ButtonConfConfiguracaoClick(Sender: TObject);
+begin
+   close;
+end;
+
+end.

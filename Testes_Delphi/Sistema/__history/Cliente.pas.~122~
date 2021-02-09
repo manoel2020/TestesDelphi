@@ -1,0 +1,148 @@
+unit Cliente;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Grids,
+  Vcl.DBGrids, Data.DB, Datasnap.DBClient,funcoesComuns;
+
+type
+  TFCliente = class(TForm)
+    Panel1: TPanel;
+    cadastrarCliente: TButton;
+    excluirCliente: TButton;
+    editarCliente: TButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Cliente_nome: TEdit;
+    cliente_ender: TEdit;
+    cliente_telef: TEdit;
+    cliente_compl: TEdit;
+    cliente_email: TEdit;
+    DBGridCliente: TDBGrid;
+    ComboBox1: TComboBox;
+    Edit6: TEdit;
+    Pesquisar: TButton;
+    ClientDataSetcliente: TClientDataSet;
+    DataSourceCliente: TDataSource;
+    ClientDataSetclientenome: TStringField;
+    ClientDataSetclienteendereco: TStringField;
+    ClientDataSetclientecomplemento: TStringField;
+    ClientDataSetclientetelefone: TStringField;
+    ClientDataSetclienteemail: TStringField;
+    ClientDataSetclientecodigo: TIntegerField;
+    cliente_cod: TEdit;
+    Label6: TLabel;
+    procedure FormShow(Sender: TObject);
+    procedure cadastrarClienteClick(Sender: TObject);
+    procedure editarClienteClick(Sender: TObject);
+    procedure DBGridClienteCellClick(Column: TColumn);
+    procedure excluirClienteClick(Sender: TObject);
+    procedure PesquisarClick(Sender: TObject);
+    procedure ComboBox1Enter(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FCliente: TFCliente;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFCliente.ComboBox1Enter(Sender: TObject);
+begin
+   Edit6.Clear;
+   ClientDataSetcliente.Filter   := '';
+   ClientDataSetcliente.Filtered := false;
+end;
+
+procedure TFCliente.DBGridClienteCellClick(Column: TColumn);
+begin
+   cliente_cod.Text   :=  ClientDataSetclientecodigo.AsString;
+   Cliente_nome.Text  :=  ClientDataSetClientenome.AsString;
+   cliente_ender.Text :=  ClientDataSetClienteendereco.AsString;
+   cliente_compl.Text :=  ClientDataSetClientecomplemento.AsString;
+   cliente_telef.Text :=  ClientDataSetClientetelefone.AsString;
+   cliente_email.Text :=  ClientDataSetClienteemail.AsString;
+end;
+
+procedure TFCliente.editarClienteClick(Sender: TObject);
+begin
+   ClientDataSetcliente.Edit;
+   ClientDataSetclientecodigo.AsInteger := StrToInt(cliente_cod.Text);
+   ClientDataSetClientenome.AsString := Cliente_nome.Text;
+   ClientDataSetClienteendereco.AsString := cliente_ender.Text;
+   ClientDataSetClientecomplemento.AsString := cliente_compl.Text;
+   ClientDataSetClientetelefone.AsString := cliente_telef.Text;
+   ClientDataSetClienteemail.AsString := cliente_email.Text;
+   ClientDataSetcliente.Post;
+   ClientDataSetcliente.SaveToFile(ExtractFilePath(ParamStr(0))+('db_cliente.xml'),dfXML);
+   LimpaCampos(self);
+end;
+
+procedure TFCliente.excluirClienteClick(Sender: TObject);
+begin
+   ClientDataSetcliente.Delete;
+   ClientDataSetCliente.SaveToFile(ExtractFilePath(ParamStr(0))+('db_cliente.xml'));
+   LimpaCampos(self);
+end;
+
+procedure TFCliente.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+   Action := caFree;//Limpa a Memoria
+end;
+
+procedure TFCliente.FormShow(Sender: TObject);
+begin
+   ClientDataSetcliente.CreateDataSet;
+   if (FileExists(ExtractFilePath(ParamStr(0))+('db_cliente.xml'))) then
+      ClientDataSetCliente.LoadFromFile(ExtractFilePath(ParamStr(0))+('db_cliente.xml'))
+   else
+      Application.MessageBox('Arquivo não encontrado','Erro',MB_ICONSTOP);
+      cliente_cod.Text := IntToStr(ClientDataSetcliente.RecordCount + 1);
+end;
+
+procedure TFCliente.PesquisarClick(Sender: TObject);
+begin
+   ClientDataSetcliente.Filtered := false;
+   ClientDataSetcliente.Filter := '';
+   ClientDataSetcliente.Filter := ComboBox1.Text + ' like ''%'+Edit6.Text+'%''';
+   ClientDataSetcliente.Filtered := true;
+end;
+
+procedure TFCliente.cadastrarClienteClick(Sender: TObject);
+begin
+   if(cliente_cod.Text <> '')then
+   begin
+      ClientDataSetcliente.Append;
+      ClientDataSetclientecodigo.AsInteger := StrToInt(cliente_cod.Text);
+      ClientDataSetClientenome.AsString := Cliente_nome.Text;
+      ClientDataSetClienteendereco.AsString := cliente_ender.Text;
+      ClientDataSetClientecomplemento.AsString := cliente_compl.Text;
+      ClientDataSetClientetelefone.AsString := cliente_telef.Text;
+      ClientDataSetClienteemail.AsString := cliente_email.Text;
+      ClientDataSetcliente.Post;
+      ClientDataSetcliente.SaveToFile(ExtractFilePath(ParamStr(0))+('db_cliente.xml'),dfXML);
+      LimpaCampos(self);
+   end
+   else
+   begin
+      ShowMessage('Campo Codigo Obrigatório!');
+   end;
+end;
+
+
+
+
+end.
